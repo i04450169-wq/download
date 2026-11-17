@@ -1,0 +1,46 @@
+import yt_dlp
+
+
+def fetch_info(url: str) -> dict:
+    opts = {"quiet": True, "no_warnings": True, "skip_download": True}
+    with yt_dlp.YoutubeDL(opts) as ydl:
+        info = ydl.extract_info(url, download=False)
+
+    formats = []
+    seen = set()
+    for f in info.get("formats", []):
+        if f.get("vcodec") == "none":
+            continue
+        label = f"{f.get('height', '?')}p" if f.get("height") else f.get("format_note", "video")
+        key = (label, f.get("ext"))
+        if key in seen:
+            continue
+        seen.add(key)
+        formats.append({
+            "format_id": f["format_id"],
+            "label": label,
+            "ext": f.get("ext", "mp4"),
+        })
+
+    if not formats:
+        formats.append({"format_id": "best", "label": "best", "ext": "mp4"})
+
+    return {
+        "title": info.get("title", ""),
+        "thumbnail": info.get("thumbnail", ""),
+        "duration": info.get("duration", 0),
+        "formats": formats,
+    }
+
+
+def download_video(url: str, format_id: str, out_path: str, progress_hook=None):
+    opts = {
+        "format": f"{format_id}+bestaudio/best" if format_id != "best" else "best",
+        "outtmpl": out_path,
+        "merge_output_format": "mp4",
+        "quiet": True,
+        "no_warnings": True,
+        "progress_hooks": [progress_hook] if progress_hook else [],
+    }
+    with yt_dlp.YoutubeDL(opts) as ydl:
+        ydl.download([url])
