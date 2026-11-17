@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Downloader — منزّل الفيديو</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <div class="brand">⬇ VideoDL</div>
+    <button id="langToggle" class="lang-btn">EN</button>
+  </header>
+
+  <main>
+    <h1 data-i18n="title">حمّل أي فيديو من أي رابط</h1>
+    <p data-i18n="subtitle">الصق الرابط، اختر الجودة، ونزّل. مجاني ومفتوح.</p>
+
+    <div class="input-group">
+      <input type="url" id="urlInput" data-i18n-placeholder="placeholder"
+             placeholder="https://example.com/video" autocomplete="off">
+      <button id="fetchBtn" data-i18n="fetch">جلب</button>
+    </div>
+
+    <div id="status" class="status hidden"></div>
+
+    <div id="result" class="result hidden">
+      <img id="thumb" class="thumb" alt="thumbnail">
+      <div class="meta">
+        <h3 id="videoTitle"></h3>
+        <p id="videoDuration"></p>
+      </div>
+      <div class="formats">
+        <select id="formatSelect"></select>
+        <button id="downloadBtn" data-i18n="download">تحميل</button>
+      </div>
+      <div class="progress-wrap hidden" id="progressWrap">
+        <div class="progress-bar"><div id="progressFill"></div></div>
+        <span id="progressText">0%</span>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <span data-i18n="footer">مبني بـ FastAPI + yt-dlp</span>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
